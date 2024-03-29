@@ -1,0 +1,6 @@
+{
+  "total": "String",
+  "serviceDescription": "String",
+  "DoctorName": "String",
+  "doctorProfession": "String"
+}

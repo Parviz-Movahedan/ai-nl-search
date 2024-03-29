@@ -1,0 +1,22 @@
+{
+  "firstName": "String",
+  "middleName": "String",
+  "lastName": "String",
+  "phoneNumbers": [{"number": "Number", "type": "String" }],
+  "addresses": [{
+    "address":"String",
+    "city": "String",
+    "state": "String",
+    "country": "String"
+  }],
+  "paymentInfo": [{
+    "creditCard": "Number",
+    "expirationDate": "String",
+    "ccv": "Number",
+    "type": "String"
+  }],
+  "currentSymptoms" : ["String"],
+  "currentDiagnosed" : [{"$ref": "Schema.Diagnosis.json"}],
+  "balanceTotal": "String",
+"transactions": [{"$ref": "Schema.Transactions.json"}]
+}
