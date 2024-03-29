@@ -8,6 +8,7 @@ import com.parviz.ai.search.dto.SearchRequest;
 import com.parviz.ai.search.dto.app.ErrorResponse;
 import com.parviz.ai.search.dto.app.Patient;
 import com.parviz.ai.search.dto.app.Response;
+import com.parviz.ai.search.exception.DocumentNotFoundException;
 import com.parviz.ai.search.service.PatientService;
 import jakarta.websocket.server.PathParam;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -53,22 +55,24 @@ public class SearchController {
     public ResponseEntity<Patient> getPatient(@PathVariable String patientId) {
         return ResponseEntity.ok(patientService
                 .findPatient(patientId)
-                .orElseThrow(() -> {
-                            ResponseStatusException ex = new ResponseStatusException(NOT_FOUND, patientId + " not found");
-                            log.error(patientId + " not found", ex);
-                            return ex;
-                        }
-                ));
+                .orElseThrow(() ->
+                    DocumentNotFoundException
+                                    .builder()
+                                    .id(patientId)
+                                    .message(patientId + " not found")
+                                    .errorCode(NOT_FOUND.value())
+                                    .build()
+                )
+        );
     }
 
-
     @PostMapping("/patients")
-    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) throws JsonProcessingException {
+    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) {
         return ResponseEntity.ok(patientService.addPatient(patient));
     }
 
     @PutMapping("/patients")
-    public ResponseEntity<Patient> updatePatient(@RequestBody Patient patient) throws JsonProcessingException {
+    public ResponseEntity<Patient> updatePatient(@RequestBody Patient patient){
         return ResponseEntity.ok(patientService.updatePatient(patient));
     }
 

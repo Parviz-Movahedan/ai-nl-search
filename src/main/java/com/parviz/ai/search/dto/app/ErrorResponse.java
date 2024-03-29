@@ -8,5 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ErrorResponse extends Response{
+    private int errorCode;
     private String message;
 }
